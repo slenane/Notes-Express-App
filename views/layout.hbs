@@ -1,11 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>{{title}}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel='stylesheet' href='/assets/vendor/bootstrap/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="/assets/stylesheets/style.css">
   </head>
   <body>
     {{> header }}
     {{{body}}}
+
+    {{!-- JQuery first, then Popper.js, then Bootstrap --}}
+    <script src="/assest/vendor/jquery/jquery.min.js"></script>
+    <script src="/assest/vendor/popper.js/popper.min.js"></script>
+    <script src="/assest/vendor/bootstrap/js/bootstrap.min.js"></script>
   </body>
 </html>
