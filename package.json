@@ -1,9 +1,9 @@
 {
   "name": "notes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
-    "start": "cross-env DEBUG=notes:* node ./app.mjs"
+    "start": "cross-env REQUEST_LOG_FILE=log.txt REQUEST_LOG_FORMAT=common DEBUG=notes:* node ./app.mjs"
   },
   "dependencies": {
     "bootstrap": "^4.5.3",
@@ -12,10 +12,12 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "feather-icons": "^4.25.0",
+    "fs-extra": "^10.0.0",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
     "jquery": "^3.5.1",
     "morgan": "~1.9.1",
-    "popper.js": "^1.16.1"
+    "popper.js": "^1.16.1",
+    "rotating-file-stream": "^2.1.5"
   }
 }

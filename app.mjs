@@ -3,6 +3,7 @@ import { default as hbs } from 'hbs';
 import * as path from 'path';
 //import * as favicon from 'serve-favicon';
 import { default as logger } from 'morgan';
+import { default as rfs } from 'rotating-file-stream';
 import { default as cookieParser } from 'cookie-parser';
 import { default as bodyParser } from 'body-parser';
 import * as http from 'http';
@@ -15,7 +16,12 @@ import { router as indexRouter } from './routes/index.mjs';
 import { router as notesRouter } from './routes/notes.mjs';
 
 import { InMemoryNotesStore } from './models/notes-memory.mjs';
+// import { debug } from 'console';
 export const NotesStore = new InMemoryNotesStore();
+
+import { default as DBG } from 'debug';
+const debug = DBG('notes:debug');
+const dbgerror = DBG('notes:error');
 
 export const app = express();
 
@@ -26,7 +32,23 @@ hbs.registerPartials(path.join(__dirname, 'views/partials'));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+
+// Create log and store in file if env variables are set
+app.use(logger(process.env.REQUEST_LOG_FORMAT || 'dev', {
+    // immediate: true,
+    stream: process.env.REQUEST_LOG_FILE ?
+        rfs.createStream(process.env.REQUEST_LOG_FILE, {
+            size:     '10M', // rotate every 10 MegaBytes written
+            interval: '1d',  // rotate daily
+            compress: 'gzip' // compress rotated files
+        })
+        : process.stdout
+}));
+// Log the developer freindly log to the console too
+if (process.env.REQUEST_LOG_FILE) {
+    app.use(logger('dev'));
+}
+ 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -54,3 +76,6 @@ export const server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+server.on('request', (req, res) => {
+    debug(`${new Date().toISOString()} request ${req.method} ${req.url}`);
+});
