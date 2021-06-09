@@ -75,7 +75,7 @@ async function crupdate(key, title, body) {
         throw new Error(`key ${key} cannot contain '/'`);
     }   
     const note = new Note(key, title, body);
-    const writeTo = filepath(notesdir, key);
+    const writeTo = filePath(notesdir, key);
     const writeJSON = note.JSON;
     debug(`WRITE ${writeTo} ${writeJSON}`);
     await fs.writeFile(writeTo, writeJSON, 'utf8');

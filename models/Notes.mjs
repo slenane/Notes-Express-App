@@ -15,12 +15,10 @@ export class Note {
     get body() { return this[_note_body]; }
     set body(newBody) { this[_note_body] = newBody; }
 
-    get JSON() {
-        return this.JSON.stringify({
-            key: this.key,
-            title: this.title,
-            body: this.body
-        });
+    get JSON() { 
+        return JSON.stringify({ 
+            key: this.key, title: this.title, body: this.body 
+        }); 
     }
 
     static fromJSON(json) { 
