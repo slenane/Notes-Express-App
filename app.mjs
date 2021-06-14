@@ -7,13 +7,23 @@ import { default as rfs } from 'rotating-file-stream';
 import { default as cookieParser } from 'cookie-parser';
 import { default as bodyParser } from 'body-parser';
 import * as http from 'http';
+import dotenv from 'dotenv/config.js';
+
 import { approotdir } from './approotdir.mjs';
 const __dirname = approotdir;
 import {
     normalizePort, onError, onListening, handle404, basicErrorHandler
 } from './appsupport.mjs';
+
 import { router as indexRouter } from './routes/index.mjs';
 import { router as notesRouter } from './routes/notes.mjs';
+import { router as usersRouter, initPassport } from './routes/users.mjs';
+
+// Handle Sessions
+import session from 'express-session';
+import sessionMemoryStore from 'memorystore';
+const MemoryStore = sessionMemoryStore(session);
+export const sessionCookieName = 'notescookie.sid';
 
 // Changed cH_07 P283
 // import { InMemoryNotesStore } from './models/notes-memory.mjs';
@@ -60,6 +70,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+    // Use the appropriate session store class
+    store: new MemoryStore({}),
+    // store: new LokiStore({}),
+    // store: new FileStore({ path: "sessions" }),
+    secret: 'keyboard mouse',
+    resave: true,
+    saveUninitialized: true,
+    name: sessionCookieName
+}));
+
+initPassport(app);
+
 // app.use('/assets/vendor/bootstrap', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
 app.use('/assets/vendor/bootstrap', express.static(path.join(__dirname, 'theme', 'dist')));
 app.use('/assets/vendor/jquery', express.static(path.join(__dirname, 'node_modules', 'jquery', 'dist')));
@@ -69,6 +93,7 @@ app.use('/assets/vendor/feather-icons', express.static(path.join(__dirname, 'nod
 // Router function lists
 app.use('/', indexRouter);
 app.use('/notes', notesRouter);
+app.use('/users', usersRouter);
 
 // error handlers
 // catch 404 and forward to error handler
