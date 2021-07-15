@@ -3,9 +3,9 @@
   "version": "0.0.2",
   "private": true,
   "scripts": {
-    "start": "cross-env DEBUG=notes:* SEQUELIZE_CONNECT=models/sequelize-sqlite.yaml NOTES_MODEL=sequelize USER_SERVICE_URL=http://localhost:5858 node ./app.mjs",
-    "start-server1": "cross-env DEBUG=notes:* SEQUELIZE_CONNECT=models/sequelize-sqlite.yaml NOTES_MODEL=sequelize USER_SERVICE_URL=http://localhost:5858 PORT=3000 node ./app.mjs",
-    "start-server2": "cross-env DEBUG=notes:* SEQUELIZE_CONNECT=models/sequelize-sqlite.yaml NOTES_MODEL=sequelize USER_SERVICE_URL=http://localhost:5858 PORT=3002 node ./app.mjs"
+    "start": "cross-env DEBUG=notes:*,socket.io:* SEQUELIZE_CONNECT=models/sequelize-sqlite.yaml NOTES_MODEL=sequelize USER_SERVICE_URL=http://localhost:5858 node ./app.mjs",
+    "start-server1": "cross-env DEBUG=notes:*,socket.io:* SEQUELIZE_CONNECT=models/sequelize-sqlite.yaml NOTES_MODEL=sequelize USER_SERVICE_URL=http://localhost:5858 PORT=3000 node ./app.mjs",
+    "start-server2": "cross-env DEBUG=notes:*,socket.io:* SEQUELIZE_CONNECT=models/sequelize-sqlite.yaml NOTES_MODEL=sequelize USER_SERVICE_URL=http://localhost:5858 PORT=3002 node ./app.mjs"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -30,9 +30,11 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "passport-twitter": "^1.0.4",
+    "passport.socketio": "^3.7.0",
     "popper.js": "^1.16.1",
     "rotating-file-stream": "^2.1.5",
     "sequelize": "^6.6.2",
+    "socket.io": "^2.4.1",
     "sqlite3": "^5.0.2",
     "superagent": "^5.2.2"
   }

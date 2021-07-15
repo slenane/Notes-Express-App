@@ -25,6 +25,7 @@ export default class MongoDBNotesStore extends AbstractNotesStore {
         const collection = db().collection('notes'); 
         await collection.updateOne({ notekey: key }, 
                 { $set: { title: title, body: body } });
+        this.emitUpdated(note);
         return note;
     }
 
@@ -35,6 +36,7 @@ export default class MongoDBNotesStore extends AbstractNotesStore {
         await collection.insertOne({ 
             notekey: key, title: title, body: body 
         });
+        this.emitCreated(note);
         return note;
     }
 

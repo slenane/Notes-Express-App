@@ -8,12 +8,16 @@ export default class InMemoryNotesStore extends AbstractNotesStore {
 
     async update(key, title, body) {
         notes[key] = new Note(key, title, body);
-        return notes[key];
+        let note = notes[key];
+        this.emitUpdated(note);
+        return note;
     }
 
     async create(key, title, body) {
         notes[key] = new Note(key, title, body);
-        return notes[key];
+        let note = notes[key];
+        this.emitCreated(note);
+        return note;
     }
 
     async read(key) {
@@ -23,6 +27,7 @@ export default class InMemoryNotesStore extends AbstractNotesStore {
     async destroy(key) {
         if (notes[key]) {
             delete notes[key];
+            this.emitDestroyed(key);
         } else throw new Error(`Note ${key} does not exist`);
     }
 

@@ -49,6 +49,7 @@ export default class SQLITE3NotesStore extends AbstractNotesStore {
                     resolve(note);
             });
         });
+        this.emitUpdated(note);
         return note;
     }
 
@@ -64,6 +65,7 @@ export default class SQLITE3NotesStore extends AbstractNotesStore {
                     resolve(note);
             });
         });
+        this.emitCreated(note);
         return note;
     }
 
@@ -88,6 +90,7 @@ export default class SQLITE3NotesStore extends AbstractNotesStore {
                 [ key ], err => {
                 if (err) return reject(err);
                 debug(`DESTROY ${key}`);
+                this.emitDestroyed(key);
                 resolve();
             });
         });
