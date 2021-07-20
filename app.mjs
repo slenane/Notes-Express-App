@@ -10,7 +10,8 @@ const dbgerror = DBG('notes:error');
 import { default as cookieParser } from 'cookie-parser';
 import { default as bodyParser } from 'body-parser';
 import * as http from 'http';
-import dotenv from 'dotenv/config.js';
+import dotenv from 'dotenv'
+dotenv.config()
 import socketio from 'socket.io';
 import passportSocketIo from 'passport.socketio';
 
