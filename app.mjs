@@ -28,10 +28,23 @@ import { router as usersRouter, initPassport } from './routes/users.mjs';
 // Handle Sessions
 import session from 'express-session';
 import sessionMemoryStore from 'memorystore';
-const MemoryStore = sessionMemoryStore(session);
+
+import ConnectRedis from 'connect-redis';
+const RedisStore = ConnectRedis(session);
+import redis from 'redis';
+let sessionStore;
+if (typeof process.env.REDIS_ENDPOINT !== 'undefined' && process.env.REDIS_ENDPOINT !== '') {
+    const redisClient = redis.createClient({
+        host: process.env.REDIS_ENDPOINT
+    });
+    sessionStore = new RedisStore({ client: redisClient });
+} else {
+    const MemoryStore = sessionMemoryStore(session);
+    sessionStore = new MemoryStore({});
+}
+
 export const sessionCookieName = 'notescookie.sid';
 const sessionSecret = 'keyboard mouse';
-const sessionStore = new MemoryStore({});
 // Changed cH_07 P283
 // import { InMemoryNotesStore } from './models/notes-memory.mjs';
 // export const NotesStore = new InMemoryNotesStore();
@@ -68,6 +81,15 @@ io.use(passportSocketIo.authorize({
     store: sessionStore
 }));
 
+import redisIO from 'socket.io-redis';
+if (typeof process.env.REDIS_ENDPOINT !== 'undefined' && process.env.REDIS_ENDPOINT !== '') {
+    try {
+        io.adapter(redisIO({ host: process.env.REDIS_ENDPOINT, port: 6379 }));
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

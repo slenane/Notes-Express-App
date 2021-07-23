@@ -11,3 +11,7 @@ header {
 a {
   color: #00B7FF;
 }
+
+.error_stack {
+  color: white;
+}
